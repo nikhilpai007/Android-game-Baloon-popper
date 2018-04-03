@@ -1,6 +1,6 @@
 package com.example.nik.popthebaloon;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,17 +13,15 @@ import static com.example.nik.popthebaloon.R.drawable.baloon;
  * Created by Nik on 03/04/18.
  */
 
-@SuppressLint("AppCompatCustomView")
+
 class Balloon extends ImageView {
 
-    public Balloon(Context context) {
-        super(context);
-    }
+    public Balloon(Context context) {super(context);}
 
     public Balloon(Context context, int color, int rawHeight) {
         super(context);
 
-        this.setImageResource( baloon);
+        this.setImageResource(R.drawable.baloon);
         this.setColorFilter(color);
 
         int rawWidth = rawHeight/2;
