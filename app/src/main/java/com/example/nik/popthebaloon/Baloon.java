@@ -6,9 +6,7 @@ import android.widget.ImageView;
 
 import com.example.nik.popthebaloon.utility.PixelHelper;
 
-/**
- * Created by Nik on 03/04/18.
- */
+
 
 public class Baloon extends android.support.v7.widget.AppCompatImageView {
 
@@ -21,7 +19,7 @@ public class Baloon extends android.support.v7.widget.AppCompatImageView {
             this.setImageResource( R.drawable.baloon);
             this.setColorFilter(color);
 
-            int rawWidth = rawHeight/2;
+            int rawWidth = rawHeight/3;
 
             int dpHeight = PixelHelper.pixelsToDp( rawHeight, context );
             int dpWidth = PixelHelper.pixelsToDp( rawWidth, context );

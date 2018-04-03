@@ -17,31 +17,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
 
-        getWindow().setBackgroundDrawableResource( R.drawable.images );
-        mContentView = (ViewGroup) findViewById( R.id.activity_main );
-        mContentView.setOnTouchListener( new View.OnTouchListener() {
+
+
+        getWindow().setBackgroundDrawableResource(R.drawable.images);
+        mContentView = findViewById(R.id.activity_main);
+        mContentView.setOnClickListener((view) ->{setToFullScreen();});
+        mContentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    Baloon b= new Baloon( MainActivity.this,0xFFFF0000,100);
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Balloon b;
+                    b = new Balloon(MainActivity.this,0xFFFF0000, 100);
                     b.setX(motionEvent.getX());
                     b.setY(motionEvent.getY());
                     mContentView.addView(b);
+
+
+
                 }
                 return false;
+
             }
-        } );
+        });
     }
-
-
-
-
-
-
 
     private void setToFullScreen() {
         ViewGroup rootLayout;

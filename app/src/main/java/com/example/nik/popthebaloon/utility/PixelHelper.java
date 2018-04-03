@@ -1,8 +1,5 @@
 package com.example.nik.popthebaloon.utility;
 
-/**
- * Created by Nik on 03/04/18.
- */
 
 import android.content.Context;
 import android.util.TypedValue;
