@@ -2,6 +2,7 @@ package com.example.nik.popthebaloon;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawableResource(R.drawable.images);
         mContentView = findViewById(R.id.activity_main);
+        mContentView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Balloon b = new Balloon(MainActivity.this, 0xFFFF0000, 100);
+                    b.setX(motionEvent.getX());
+                    b.setY(motionEvent.getY());
+                    mContentView.addView(b);
+
+                }
+                return false;
+
+            }
+        });
     }
 
     private void setToFullScreen() {
