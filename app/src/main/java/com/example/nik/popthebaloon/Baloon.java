@@ -24,5 +24,6 @@ public class Baloon extends android.support.v7.widget.AppCompatImageView {
             int dpHeight = PixelHelper.pixelsToDp( rawHeight, context );
             int dpWidth = PixelHelper.pixelsToDp( rawWidth, context );
              ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(dpWidth, dpHeight );
+             setLayoutParams(params);
     }
 }
