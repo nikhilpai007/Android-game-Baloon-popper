@@ -1,5 +1,3 @@
-package com.example.nik.popthebaloon;
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -15,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().setBackgroundDrawableResource(R.drawable.background);
+        getWindow().setBackgroundDrawableResource(R.drawable.modern_background);
 
         mContentView = (ViewGroup) findViewById(R.id.activity_main);
 
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Baloon b = new Baloon(MainActivity.this, 0xFFFF0000, 100);
+                    Balloon b = new Balloon(MainActivity.this, 0xFFFF0000, 100);
                     b.setX(motionEvent.getX());
                     b.setY(motionEvent.getY());
                     mContentView.addView(b);

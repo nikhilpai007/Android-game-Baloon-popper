@@ -6,25 +6,24 @@ import android.widget.ImageView;
 
 import com.example.nik.popthebaloon.utility.PixelHelper;
 
-/**
- * Created by Nik on 03/04/18.
- */
-
-public class Baloon extends android.support.v7.widget.AppCompatImageView {
+public class Baloon extends ImageView {
 
     public Baloon(Context context) {
         super( context );
     }
-         public Baloon(Context context, int color, int rawHeight) {
-            super( context );
 
-            this.setImageResource( R.drawable.baloon);
-            this.setColorFilter(color);
+    public Baloon(Context context, int color, int rawHeight) {
+        super( context );
 
-            int rawWidth = rawHeight/2;
+        this.setImageResource( R.drawable.balloon );
+        this.setColorFilter( color );
 
-            int dpHeight = PixelHelper.pixelsToDp( rawHeight, context );
-            int dpWidth = PixelHelper.pixelsToDp( rawWidth, context );
-             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(dpWidth, dpHeight );
+        int rawWidth = rawHeight / 2;
+
+        int dpHeight = PixelHelper.pixelsToDp( rawHeight, context );
+        int dpWidth = PixelHelper.pixelsToDp( rawWidth, context );
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams( dpWidth, dpHeight );
+        setLayoutParams( params );
+
     }
 }
