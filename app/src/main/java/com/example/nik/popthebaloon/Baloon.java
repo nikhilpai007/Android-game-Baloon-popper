@@ -3,6 +3,7 @@ package com.example.nik.popthebaloon;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
@@ -12,9 +13,13 @@ import com.example.nik.popthebaloon.utility.PixelHelper;
 public class Baloon extends ImageView implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
 
     private ValueAnimator mAnimator;
+    private Listeneer listeneer;
+    private boolean pooped;
 
     public Baloon(Context context) {
         super( context );
+
+        listeneer = (Listeneer) context;
     }
 
     public Baloon(Context context, int color, int rawHeight) {
@@ -52,6 +57,9 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
 
     @Override
     public void onAnimationEnd(Animator animator) {
+        if(!pooped){
+            listeneer.pop( this,false );
+        }
 
     }
 
@@ -68,6 +76,22 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
         setY( (float) valueAnimator.getAnimatedValue() );
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!pooped && event.getAction() == MotionEvent.ACTION_DOWN ){
+            listeneer.pop( this, true );
+            pooped = true;
+            mAnimator.cancel();
+
+        }
+        return super.onTouchEvent( event );
+    }
+
+    public interface Listeneer {
+        void pop(Baloon baloon, boolean touch);
 
     }
 }

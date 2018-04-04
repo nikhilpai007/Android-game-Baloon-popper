@@ -12,7 +12,8 @@ import android.view.ViewTreeObserver;
 import java.util.Date;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+implements Baloon.Listeneer{
 
     private ViewGroup mContentView;
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MINIMUM_ANIM_TIME = 1000;
     public static final int MAXIMUM_ANIM_TIME = 8000;
     private int mLevel;
+    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void goButton(View view) {
         levels();
+    }
+
+    @Override
+    public void pop(Baloon baloon, boolean touch) {
+        mContentView.removeView( baloon );
+        if(touch){
+            mScore++;
+        }
+        displayUpdate();
+    }
+
+    private void displayUpdate() {
+        // TODO: 03/04/18 Update Display 
     }
 
     private class Launcher extends AsyncTask<Integer, Integer, Void> {
@@ -156,4 +171,5 @@ public class MainActivity extends AppCompatActivity {
         balloon.BaloonGo(mHeightofScreen, duration);
 
     }
+
 }
