@@ -328,7 +328,7 @@ implements Baloon.Listeneer{
     private void launchBalloon(int x) {
 
         Baloon balloon = new Baloon(this, mBalloonCol[mNextCol], 150);
-
+        mBalloons.add(balloon);
         if (mNextCol + 1 == mBalloonCol.length) {
             mNextCol = 0;
         } else {
