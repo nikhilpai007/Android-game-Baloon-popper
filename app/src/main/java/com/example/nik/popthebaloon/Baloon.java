@@ -1,12 +1,17 @@
 package com.example.nik.popthebaloon;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.example.nik.popthebaloon.utility.PixelHelper;
 
-public class Baloon extends ImageView {
+public class Baloon extends ImageView implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
+
+    private ValueAnimator mAnimator;
 
     public Baloon(Context context) {
         super( context );
@@ -24,6 +29,45 @@ public class Baloon extends ImageView {
         int dpWidth = PixelHelper.pixelsToDp( rawWidth, context );
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams( dpWidth, dpHeight );
         setLayoutParams( params );
+
+    }
+
+    public void BaloonGo(int HeightofScreen, int time ) {
+         mAnimator = new ValueAnimator();
+         mAnimator.setDuration( time );
+         mAnimator.setFloatValues( HeightofScreen, 0f);
+         mAnimator.setInterpolator( new LinearInterpolator(  ) );
+         mAnimator.setTarget( this );
+         mAnimator.addListener( this );
+         mAnimator.addUpdateListener( this );
+         mAnimator.start();
+
+
+    }
+
+    @Override
+    public void onAnimationStart(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        setY( (float) valueAnimator.getAnimatedValue() );
 
     }
 }

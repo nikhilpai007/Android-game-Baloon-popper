@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewGroup mContentView;
 
     private int[] mBalloonCol = new int[3];
-    private int mNextCol;
+    private int mNextCol, mWidthOfScreen, mHeightofScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,19 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setBackgroundDrawableResource(R.drawable.background);
 
         mContentView = (ViewGroup) findViewById(R.id.activity_main);
+        setToFullScreen();
+
+        ViewTreeObserver viewTreeObserver=mContentView.getViewTreeObserver();
+        if(viewTreeObserver.isAlive()){
+            viewTreeObserver.addOnGlobalLayoutListener( new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mContentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mWidthOfScreen =mContentView.getWidth();
+                    mHeightofScreen =mContentView.getHeight();
+                }
+            } );
+        }
 
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
                     Baloon b;
                     b = new Baloon(MainActivity.this, mBalloonCol[mNextCol], 100);
                     b.setX(motionEvent.getX());
-                    b.setY(motionEvent.getY());
+                    b.setY(mHeightofScreen);
                     mContentView.addView(b);
+                    b.BaloonGo( mHeightofScreen, 2500 );
 
                     if(mNextCol + 1 == mBalloonCol.length) {
                         mNextCol = 0;
