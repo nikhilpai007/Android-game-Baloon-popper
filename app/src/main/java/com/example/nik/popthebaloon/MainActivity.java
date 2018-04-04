@@ -1,5 +1,6 @@
 package com.example.nik.popthebaloon;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -10,10 +11,18 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewGroup mContentView;
 
+    private int[] mBalloonCol = new int[3];
+    private int mNextCol;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mBalloonCol [0]= Color.argb(225,225,0,0);
+        mBalloonCol[1]= Color.argb(225,0,225,0);
+        mBalloonCol[2]= Color.argb(225,0,0,225);
+
 
         getWindow().setBackgroundDrawableResource(R.drawable.background);
 
@@ -30,10 +39,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Baloon b = new Baloon(MainActivity.this, 0xFFFF0000, 100);
+                    Baloon b;
+                    b = new Baloon(MainActivity.this, mBalloonCol[mNextCol], 100);
                     b.setX(motionEvent.getX());
                     b.setY(motionEvent.getY());
                     mContentView.addView(b);
+
+                    if(mNextCol + 1 == mBalloonCol.length) {
+                        mNextCol = 0;
+
+                    }else {
+                        mNextCol ++ ;
+                    }
+
                 }
 
                 return false;
