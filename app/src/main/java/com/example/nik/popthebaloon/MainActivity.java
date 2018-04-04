@@ -8,9 +8,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
@@ -20,13 +24,16 @@ implements Baloon.Listeneer{
 
     private int[] mBalloonCol = new int[3];
     private int mNextCol, mWidthOfScreen, mHeightofScreen;
-    public static final int MINIMUM_ANIM_DELAY = 500;
-    public static final int MAXIMUM_ANIM_DELAY = 1500;
-    public static final int MINIMUM_ANIM_TIME = 1000;
-    public static final int MAXIMUM_ANIM_TIME = 8000;
+    private static final int MINIMUM_ANIM_DELAY = 500;
+    private static final int MAXIMUM_ANIM_DELAY = 1500;
+    private static final int MINIMUM_ANIM_TIME = 1000;
+    private static final int MAXIMUM_ANIM_TIME = 8000;
+    private static final int NUMBER_OF_PINS=5;
     private int mLevel;
     private int mScore;
+    private int mPinsUsed;
     TextView mScoreDisplay,mLevelDisplay;
+    private List <ImageView> mPinImages= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +63,17 @@ implements Baloon.Listeneer{
         }
 
             mContentView.setOnClickListener(new View.OnClickListener() {
-            mScoreDisplay=(TextView) findViewById(R.id.score_display);
-            mLevelDisplay=(TextView) findViewById(R.id.level_display);
+                mScoreDisplay=(TextView)findViewById(R.id.score_display);
 
-            displayUpdate();
+                mLevelDisplay=(TextView)findViewById(R.id.level_display);
+
+                mPinImages.add(ImageView)findViewById(R.id.pushpin1);
+                mPinImages.add(ImageView)findViewById(R.id.pushpin2);
+                mPinImages.add(ImageView)findViewById(R.id.pushpin3);
+                mPinImages.add(ImageView)findViewById(R.id.pushpin4);
+                mPinImages.add(ImageView)findViewById(R.id.pushpin5);
+                displayUpdate();
+
             @Override
             public void onClick(View view) {
                 setToFullScreen();
@@ -104,8 +118,26 @@ implements Baloon.Listeneer{
         mContentView.removeView( baloon );
         if(touch){
             mScore++;
+        } else{
+            mPinsUsed++;
+            if(mPinsUsed<=mPinImages.size()){
+
+                mPinImages.get(mPinsUsed-1)
+                        .setImageResource(R.drawable.pin_off);
+            }
+            if (mPinsUsed==NUMBER_OF_PINS){
+                gameOver(true);
+                return;
+
+            } else {
+                Toast.makeText(this, "Missed that one :(",Toast.LENGTH_SHORT).show();
+            }
         }
         displayUpdate();
+    }
+
+    private void gameOver(boolean b) {
+        // to do afterrrrr
     }
 
     private void displayUpdate() {
