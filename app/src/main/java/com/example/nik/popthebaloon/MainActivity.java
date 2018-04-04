@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,22 +21,30 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
 implements Baloon.Listeneer{
 
-    private ViewGroup mContentView;
-
-    private int[] mBalloonCol = new int[3];
     private int mNextCol, mWidthOfScreen, mHeightofScreen;
     private static final int MINIMUM_ANIM_DELAY = 500;
     private static final int MAXIMUM_ANIM_DELAY = 1500;
     private static final int MINIMUM_ANIM_TIME = 1000;
     private static final int MAXIMUM_ANIM_TIME = 8000;
     private static final int NUMBER_OF_PINS=5;
+    private static final int BALLOONS_PER_LEVEL = 10;
+    private ViewGroup mContentView;
+    private int[] mBalloonCol = new int[3];
+    private int mNextColor, mScreenWidth, mScreenHeight;
     private int mLevel;
     private int mScore;
     private int mPinsUsed;
     TextView mScoreDisplay,mLevelDisplay;
     private List <ImageView> mPinImages= new ArrayList<>();
+    private List<Baloon> mBalloons = new ArrayList<>();
 
+    private Button mGoButton;
+    private boolean mPlaying;
+    private boolean mGameStopped = true;
+    private int mBalloonsPopped;
+    private SoundHelper mSoundHelper;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -53,6 +62,8 @@ implements Baloon.Listeneer{
         ViewTreeObserver viewTreeObserver=mContentView.getViewTreeObserver();
         if(viewTreeObserver.isAlive()){
             viewTreeObserver.addOnGlobalLayoutListener( new ViewTreeObserver.OnGlobalLayoutListener() {
+
+
                 @Override
                 public void onGlobalLayout() {
                     mContentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -63,7 +74,14 @@ implements Baloon.Listeneer{
         }
 
             mContentView.setOnClickListener(new View.OnClickListener() {
-                mScoreDisplay=(TextView)findViewById(R.id.score_display);
+
+                public void onClick(View view) {
+
+                    setToFullScreen();
+                }
+            });
+
+          mScoreDisplay=(TextView)findViewById(R.id.score_display);
 
                 mLevelDisplay=(TextView)findViewById(R.id.level_display);
 
@@ -72,16 +90,17 @@ implements Baloon.Listeneer{
                 mPinImages.add(ImageView)findViewById(R.id.pushpin3);
                 mPinImages.add(ImageView)findViewById(R.id.pushpin4);
                 mPinImages.add(ImageView)findViewById(R.id.pushpin5);
-                displayUpdate();
+                mGoButton = (Button) findViewById(R.id.go_button);
+        displayUpdate();
+        mSoundHelper = new SoundHelper();
 
-            @Override
-            public void onClick(View view) {
-                setToFullScreen();
-            }
-        });
+        mSoundHelper.prepareMusicPlayer(this);
 
 
     }
+
+
+
 
     private void setToFullScreen() {
         ViewGroup rootLayout = (ViewGroup) findViewById(R.id.activity_main);
@@ -94,28 +113,100 @@ implements Baloon.Listeneer{
     }
 
     @Override
+
+
     protected void onResume() {
+
         super.onResume();
+
         setToFullScreen();
     }
 
-    private void levels() {
+
+    private void startGame()
+    {
+
+        setToFullScreen();
+
+        mScore = 0;
+
+        mLevel = 0;
+
+        mPinsUsed = 0;
+
+        for (ImageView pin :
+
+                mPinImages) {
+
+            pin.setImageResource(R.drawable.pin);
+        }
+
+        mGameStopped = false;
+
+        startLevel();
+
+        mSoundHelper.playMusic();
+    }
+
+
+
+
+
+    private void startLevel() {
+
         mLevel++;
+
         displayUpdate();
-        Launcher launcher = new Launcher();
+
+
+        BaloonLauncher launcher = new BalloonLauncher();
+
         launcher.execute(mLevel);
 
+        mPlaying = true;
 
+        mBalloonsPopped = 0;
+
+        mGoButton.setText("Stop game");
 
     }
 
+    private void finishLevel()
+    {
+
+        Toast.makeText(this, String.format("You finished level %d", mLevel),
+
+                Toast.LENGTH_SHORT).show();
+
+        mPlaying = false;
+
+        mGoButton.setText(String.format("Start level %d", mLevel + 1));
+
+    }
+
+
+
+
+
+
     public void goButton(View view) {
-        levels();
+        if (mPlaying) {
+
+        gameOver(false);
+    }
+    else if (mGameStopped) {
+        startGame();
+
+    } else {
+        startLevel();
+    }
     }
 
     @Override
     public void pop(Baloon baloon, boolean touch) {
+        mBalloonsPopped++;
         mContentView.removeView( baloon );
+        mBalloons.remove(baloon);
         if(touch){
             mScore++;
         } else{
@@ -134,12 +225,54 @@ implements Baloon.Listeneer{
             }
         }
         displayUpdate();
+        if (mBalloonsPopped == BALLOONS_PER_LEVEL)
+        {
+            finishLevel();
+        }
     }
 
-    private void gameOver(boolean b) {
-        // to do afterrrrr
-    }
 
+
+
+
+
+    private void gameOver(boolean allPinsUsed) {
+
+        Toast.makeText(this, "Game over!", Toast.LENGTH_SHORT).show();
+
+        mSoundHelper.pauseMusic();
+
+
+        for (Baloon balloon :
+
+                mBalloons) {
+
+            mContentView.removeView(balloon);
+
+            balloon.setPopped(true);
+        }
+
+        mBalloons.clear();
+
+        mPlaying = false;
+
+        mGameStopped = true;
+
+        mGoButton.setText("Start game");
+
+
+        if (allPinsUsed) {
+
+            if (HighScoreHelper.isTopScore(this, mScore)) {
+
+                HighScoreHelper.setTopScore(this, mScore);
+
+                SimpleAlertDialog dialog = SimpleAlertDialog.newInstance("New High Score!",
+
+                        String.format("Your new high score is %d", mScore));
+
+                dialog.show(getSupportFragmentManager(), null);
+            }}}
     private void displayUpdate() {
         // TODO: 03/04/18 Update Display
         mScoreDisplay.setText(String.valueOf(mScore));
@@ -162,7 +295,7 @@ implements Baloon.Listeneer{
             int minDelay = maxDelay / 2;
 
             int balloonsLaunched = 0;
-            while (balloonsLaunched < 3) {
+            while (mPlaying && balloonsLaunched < BALLOONS_PER_LEVEL) {
 
 //              Get a random horizontal position for the next balloon
                 Random random = new Random(new Date().getTime());
@@ -190,7 +323,7 @@ implements Baloon.Listeneer{
             launchBalloon(xPosition);
         }
 
-    }
+
 
     private void launchBalloon(int x) {
 
