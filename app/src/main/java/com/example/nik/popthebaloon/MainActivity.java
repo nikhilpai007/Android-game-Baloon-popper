@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import java.util.Date;
 import java.util.Random;
@@ -25,6 +26,7 @@ implements Baloon.Listeneer{
     public static final int MAXIMUM_ANIM_TIME = 8000;
     private int mLevel;
     private int mScore;
+    TextView mScoreDisplay,mLevelDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,11 @@ implements Baloon.Listeneer{
             } );
         }
 
-        mContentView.setOnClickListener(new View.OnClickListener() {
+            mContentView.setOnClickListener(new View.OnClickListener() {
+            mScoreDisplay=(TextView) findViewById(R.id.score_display);
+            mLevelDisplay=(TextView) findViewById(R.id.level_display);
+
+            displayUpdate();
             @Override
             public void onClick(View view) {
                 setToFullScreen();
@@ -81,6 +87,7 @@ implements Baloon.Listeneer{
 
     private void levels() {
         mLevel++;
+        displayUpdate();
         Launcher launcher = new Launcher();
         launcher.execute(mLevel);
 
@@ -102,7 +109,9 @@ implements Baloon.Listeneer{
     }
 
     private void displayUpdate() {
-        // TODO: 03/04/18 Update Display 
+        // TODO: 03/04/18 Update Display
+        mScoreDisplay.setText(String.valueOf(mScore));
+        mLevelDisplay.setText(String.valueOf(mLevel));
     }
 
     private class Launcher extends AsyncTask<Integer, Integer, Void> {
