@@ -160,7 +160,7 @@ implements Balloon.Listener {
         displayUpdate();
 
 
-        BaloonLauncher launcher = new BalloonLauncher();
+        BalloonLauncher launcher = new BalloonLauncher();
 
         launcher.execute(mLevel);
 
@@ -280,7 +280,7 @@ implements Balloon.Listener {
         mLevelDisplay.setText(String.valueOf(mLevel));
     }
 
-    private class Launcher extends AsyncTask<Integer, Integer, Void> {
+    private class BalloonLauncher extends AsyncTask<Integer, Integer, Void> {
 
         @Override
         protected Void doInBackground(Integer... params) {
