@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
-implements Baloon.Listeneer{
+implements Balloon.Listener {
 
     private int mNextCol, mWidthOfScreen, mHeightofScreen;
     private static final int MINIMUM_ANIM_DELAY = 500;
@@ -36,7 +35,7 @@ implements Baloon.Listeneer{
     private int mPinsUsed;
     TextView mScoreDisplay,mLevelDisplay;
     private List <ImageView> mPinImages= new ArrayList<>();
-    private List<Baloon> mBalloons = new ArrayList<>();
+    private List<Balloon> mBalloons = new ArrayList<>();
 
     private Button mGoButton;
     private boolean mPlaying;
@@ -203,7 +202,7 @@ implements Baloon.Listeneer{
     }
 
     @Override
-    public void pop(Baloon baloon, boolean touch) {
+    public void pop(Balloon baloon, boolean touch) {
         mBalloonsPopped++;
         mContentView.removeView( baloon );
         mBalloons.remove(baloon);
@@ -243,7 +242,7 @@ implements Baloon.Listeneer{
         mSoundHelper.pauseMusic();
 
 
-        for (Baloon balloon :
+        for (Balloon balloon :
 
                 mBalloons) {
 
@@ -327,7 +326,7 @@ implements Baloon.Listeneer{
 
     private void launchBalloon(int x) {
 
-        Baloon balloon = new Baloon(this, mBalloonCol[mNextCol], 150);
+        Balloon balloon = new Balloon(this, mBalloonCol[mNextCol], 150);
         mBalloons.add(balloon);
         if (mNextCol + 1 == mBalloonCol.length) {
             mNextCol = 0;
@@ -342,7 +341,7 @@ implements Baloon.Listeneer{
 
 //      Let 'er fly
         int duration = Math.max(MINIMUM_ANIM_TIME, MAXIMUM_ANIM_TIME - (mLevel * 1000));
-        balloon.BaloonGo(mHeightofScreen, duration);
+        balloon.BalloonGo(mHeightofScreen, duration);
 
     }
 

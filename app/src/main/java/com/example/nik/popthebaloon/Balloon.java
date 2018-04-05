@@ -10,21 +10,21 @@ import android.widget.ImageView;
 
 import com.example.nik.popthebaloon.utility.PixelHelper;
 
-public class Baloon extends ImageView implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
+public class Balloon extends ImageView implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
 
     private ValueAnimator mAnimator;
-    private Listeneer listeneer;
+    private Listener listener;
     private boolean pooped;
 
-    public Baloon(Context context) {
+    public Balloon(Context context) {
         super( context );
 
-        listeneer = (Listeneer) context;
+        listener = (Listener) context;
     }
 
-    public Baloon(Context context, int color, int rawHeight) {
+    public Balloon(Context context, int color, int rawHeight) {
         super( context );
-
+        listener = (Listener) context;
         this.setImageResource( R.drawable.balloon );
         this.setColorFilter( color );
 
@@ -37,10 +37,12 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
 
     }
 
-    public void BaloonGo(int HeightofScreen, int time ) {
+
+
+    public void BalloonGo(int HeightScreen, int time ) {
          mAnimator = new ValueAnimator();
          mAnimator.setDuration( time );
-         mAnimator.setFloatValues( HeightofScreen, 0f);
+         mAnimator.setFloatValues( HeightScreen, 0f);
          mAnimator.setInterpolator( new LinearInterpolator(  ) );
          mAnimator.setTarget( this );
          mAnimator.addListener( this );
@@ -58,7 +60,7 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
     @Override
     public void onAnimationEnd(Animator animator) {
         if(!pooped){
-            listeneer.pop( this,false );
+            listener.pop( this,false );
         }
 
     }
@@ -82,7 +84,7 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!pooped && event.getAction() == MotionEvent.ACTION_DOWN ){
-            listeneer.pop( this, true );
+            listener.pop( this, true );
             pooped = true;
             mAnimator.cancel();
 
@@ -99,8 +101,8 @@ public class Baloon extends ImageView implements Animator.AnimatorListener, Valu
 
     }
 
-    public interface Listeneer {
-        void pop(Baloon baloon, boolean touch);
+    public interface Listener {
+        void pop(Balloon balloon, boolean touch);
 
     }
 }
