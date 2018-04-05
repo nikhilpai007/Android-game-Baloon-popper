@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nik.popthebaloon.utility.HighScoreHelper;
+import com.example.nik.popthebaloon.utility.SimpleAlertDialog;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
