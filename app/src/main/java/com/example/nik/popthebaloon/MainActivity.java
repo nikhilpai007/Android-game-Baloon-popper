@@ -86,12 +86,11 @@ implements Balloon.Listener {
           mScoreDisplay=(TextView)findViewById(R.id.score_display);
 
                 mLevelDisplay=(TextView)findViewById(R.id.level_display);
-
-                mPinImages.add(ImageView)findViewById(R.id.pushpin1);
-                mPinImages.add(ImageView)findViewById(R.id.pushpin2);
-                mPinImages.add(ImageView)findViewById(R.id.pushpin3);
-                mPinImages.add(ImageView)findViewById(R.id.pushpin4);
-                mPinImages.add(ImageView)findViewById(R.id.pushpin5);
+                mPinImages.add((ImageView) findViewById(R.id.pushpin1));
+                mPinImages.add((ImageView) findViewById(R.id.pushpin2));;
+                mPinImages.add((ImageView) findViewById(R.id.pushpin3));
+                mPinImages.add((ImageView) findViewById(R.id.pushpin4));
+                mPinImages.add((ImageView) findViewById(R.id.pushpin5));;
                 mGoButton = (Button) findViewById(R.id.go_button);
         displayUpdate();
         mSoundHelper = new SoundHelper();

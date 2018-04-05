@@ -22,7 +22,7 @@ public class Balloon extends ImageView implements Animator.AnimatorListener, Val
         listener = (Listener) context;
     }
 
-    public Balloon(Context context, int color, int rawHeight) {
+    public Balloon(MainActivity.Launcher context, int color, int rawHeight) {
         super( context );
         listener = (Listener) context;
         this.setImageResource( R.drawable.balloon );
